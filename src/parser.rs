@@ -141,17 +141,17 @@ mod tests {
 
     #[test]
     fn header_test() {
-        assert_eq!(header("-\n"), Ok(("", [].to_vec())));
-        assert_eq!(header("--\n"), Ok(("", [].to_vec())));
-        assert_eq!(header("---------\n"), Ok(("", [].to_vec())));
-        assert_eq!(header("-- [a]\n"), Ok(("", ["a".to_string()].to_vec())));
+        assert_eq!(header("-\n"), Ok(("", vec![])));
+        assert_eq!(header("--\n"), Ok(("", vec![])));
+        assert_eq!(header("---------\n"), Ok(("", vec![])));
+        assert_eq!(header("-- [a]\n"), Ok(("", vec!["a".to_string()])));
         assert_eq!(
             header("-- [a]  [c]\n"),
-            Ok(("", ["a".to_string(), "c".to_string()].to_vec()))
+            Ok(("", vec!["a".to_string(), "c".to_string()]))
         );
         assert_eq!(
             header("-- [a]  [c] # Plus a comment\n"),
-            Ok(("", ["a".to_string(), "c".to_string()].to_vec()))
+            Ok(("", vec!["a".to_string(), "c".to_string()]))
         );
     }
 
@@ -170,7 +170,7 @@ mod tests {
             Ok((
                 "",
                 Slide {
-                    options: [].to_vec(),
+                    options: vec![],
                     content: "".to_string()
                 }
             ))
@@ -180,7 +180,7 @@ mod tests {
             Ok((
                 "",
                 Slide {
-                    options: ["a".to_string()].to_vec(),
+                    options: vec!["a".to_string()],
                     content: "things and stuff".to_string()
                 }
             ))
