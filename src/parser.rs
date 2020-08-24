@@ -44,6 +44,7 @@ pub struct SlideDeck {
     slides: Vec<Slide>,
 }
 
+// An individual "[blah]" option
 fn option(input: &str) -> nom::IResult<&str, &str> {
     return preceded(multispace0, delimited(tag("["), alphanumeric1, tag("]")))(input);
 }
@@ -56,6 +57,7 @@ fn whitespace_or_comment(input: &str) -> nom::IResult<&str, &str> {
     return Ok((input, ""));
 }
 
+// The first slide has [foo] entries on individual lines
 fn settings(input: &str) -> nom::IResult<&str, SlideOptions> {
     let (input, options) = terminated(
         many0(preceded(whitespace_or_comment, option)),
@@ -79,12 +81,15 @@ fn header(input: &str) -> nom::IResult<&str, SlideOptions> {
     return Ok((input, options));
 }
 
+// Here we don't care about the content (yet)
+// Instead parse until we get to the next slide divider
 fn content(input: &str) -> nom::IResult<&str, &str> {
     let (input, content) = alt((terminated(take_until("\n--"), tag("\n")), rest))(input)?;
 
     return Ok((input, content));
 }
 
+// A whole slide has a header and content, ending on another slide or EOF
 fn slide(input: &str) -> nom::IResult<&str, Slide> {
     let (input, options) = header(input)?;
     let (input, content) = content(input)?;
@@ -101,6 +106,7 @@ fn slides(input: &str) -> nom::IResult<&str, Vec<Slide>> {
     return many0(slide)(input);
 }
 
+// A deck has slide-0 with global options and then a list of slides
 pub fn parse_deck(input: &str) -> nom::IResult<&str, SlideDeck> {
     let (input, global_options) = settings(input)?;
     let (input, slides) = slides(input)?;
