@@ -1,4 +1,4 @@
-extern crate nom;
+use indoc::indoc;
 
 // grammar Pinpoint::Grammar {
 //   token TOP {
@@ -24,7 +24,9 @@ extern crate nom;
 use nom::{
     branch::alt,
     bytes::complete::{tag, take_until},
-    character::complete::{alphanumeric1, line_ending, multispace0, multispace1, not_line_ending},
+    character::complete::{
+        line_ending, multispace0, multispace1, not_line_ending,
+    },
     combinator::rest,
     multi::{many0, many1},
     sequence::{delimited, preceded, terminated},
@@ -46,7 +48,7 @@ pub struct SlideDeck {
 
 // An individual "[blah]" option
 fn option(input: &str) -> nom::IResult<&str, &str> {
-    return preceded(multispace0, delimited(tag("["), alphanumeric1, tag("]")))(input);
+    return preceded(multispace0, delimited(tag("["), take_until("]"), tag("]")))(input);
 }
 
 fn whitespace_or_comment(input: &str) -> nom::IResult<&str, &str> {
@@ -256,6 +258,43 @@ mod tests {
                     ]
                 }
             ))
+        );
+
+        let example_deck = indoc! {"
+            # the 0th \"slide\" provides default styling for the presentation
+            [bottom]           # position of text
+            [slide-bg.jpg]     # default slide background
+            --- [black] [center] # override background and text position
+
+            A presentation
+
+            --------- # lines starting with hyphens separate slides
+
+            The format is meant to be <u>simple</u>
+
+            --- [ammo.jpg]  # override background
+
+            • Bullet point lists through unicode
+            • Evil, but sometimes needed
+        "};
+
+        assert_eq!(
+            parse_deck(example_deck),
+            Ok(("", SlideDeck {
+                global_options: vec![
+                    "bottom".to_string(),
+                    "slide-bg.jpg".to_string()],
+                slides: vec![
+                    Slide {
+                        options: vec!["black".to_string(), "center".to_string()],
+                        content: "A presentation\n".to_string() },
+                    Slide {
+                        options: vec![],
+                        content: "The format is meant to be <u>simple</u>\n".to_string() },
+                    Slide {
+                        options: vec!["ammo.jpg".to_string()],
+                        content: "• Bullet point lists through unicode\n• Evil, but sometimes needed\n".to_string() }
+                ] }))
         );
     }
 }

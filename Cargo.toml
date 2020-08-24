@@ -12,3 +12,4 @@ path = "src/parser.rs"
 
 [dependencies]
 nom = "5.0"
+indoc = "1.0"
