@@ -26,7 +26,7 @@ use nom::{
     bytes::complete::{tag, take_until},
     character::complete::{alphanumeric1, line_ending, multispace0, multispace1, not_line_ending},
     combinator::rest,
-    multi::many0,
+    multi::{many0, many1},
     sequence::{delimited, preceded, terminated},
 };
 
@@ -73,7 +73,7 @@ fn header(input: &str) -> nom::IResult<&str, SlideOptions> {
     let option_list = many0(option);
 
     let (input, options) = terminated(
-        preceded(tag("--"), option_list),
+        preceded(many1(tag("-")), option_list),
         alt((whitespace_or_comment, line_ending)),
     )(input)?;
 
@@ -84,7 +84,7 @@ fn header(input: &str) -> nom::IResult<&str, SlideOptions> {
 // Here we don't care about the content (yet)
 // Instead parse until we get to the next slide divider
 fn content(input: &str) -> nom::IResult<&str, &str> {
-    let (input, content) = alt((terminated(take_until("\n--"), tag("\n")), rest))(input)?;
+    let (input, content) = alt((terminated(take_until("\n-"), tag("\n")), rest))(input)?;
 
     return Ok((input, content));
 }
@@ -141,7 +141,9 @@ mod tests {
 
     #[test]
     fn header_test() {
+        assert_eq!(header("-\n"), Ok(("", [].to_vec())));
         assert_eq!(header("--\n"), Ok(("", [].to_vec())));
+        assert_eq!(header("---------\n"), Ok(("", [].to_vec())));
         assert_eq!(header("-- [a]\n"), Ok(("", ["a".to_string()].to_vec())));
         assert_eq!(
             header("-- [a]  [c]\n"),
