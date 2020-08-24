@@ -1,5 +1,5 @@
 fn main() {
-    println!("{:?}", parser::parse_slides("hello"));
-    println!("{:?}", parser::parse_slides("hello world"));
-    println!("{:?}", parser::parse_slides("goodbye hello again"));
+    println!("{:?}", parser::parse_deck("hello"));
+    println!("{:?}", parser::parse_deck("hello world"));
+    println!("{:?}", parser::parse_deck("goodbye hello again"));
 }

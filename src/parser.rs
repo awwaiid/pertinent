@@ -101,7 +101,7 @@ fn slides(input: &str) -> nom::IResult<&str, Vec<Slide>> {
     return many0(slide)(input);
 }
 
-pub fn parse_slides(input: &str) -> nom::IResult<&str, SlideDeck> {
+pub fn parse_deck(input: &str) -> nom::IResult<&str, SlideDeck> {
     let (input, global_options) = settings(input)?;
     let (input, slides) = slides(input)?;
     return Ok((
@@ -182,7 +182,7 @@ mod tests {
     #[test]
     fn deck_test() {
         assert_eq!(
-            parse_slides(""),
+            parse_deck(""),
             Ok((
                 "",
                 SlideDeck {
@@ -192,7 +192,7 @@ mod tests {
             ))
         );
         assert_eq!(
-            parse_slides("--\nhello world"),
+            parse_deck("--\nhello world"),
             Ok((
                 "",
                 SlideDeck {
@@ -205,7 +205,7 @@ mod tests {
             ))
         );
         assert_eq!(
-            parse_slides("[a]\n--\nhello world"),
+            parse_deck("[a]\n--\nhello world"),
             Ok((
                 "",
                 SlideDeck {
@@ -218,7 +218,7 @@ mod tests {
             ))
         );
         assert_eq!(
-            parse_slides("[a]\n-- [b]\nhello world"),
+            parse_deck("[a]\n-- [b]\nhello world"),
             Ok((
                 "",
                 SlideDeck {
@@ -231,7 +231,7 @@ mod tests {
             ))
         );
         assert_eq!(
-            parse_slides("[a]\n-- [b] [c] # fishies\nhello world\n-- [d]\nThis is dog\n"),
+            parse_deck("[a]\n-- [b] [c] # fishies\nhello world\n-- [d]\nThis is dog\n"),
             Ok((
                 "",
                 SlideDeck {
