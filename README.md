@@ -1,6 +1,6 @@
 # Pertinent - Get To The Point!
 
-This is a learning-exercise rewrite of [Pinpoint](http://wiki.gnome.org/Apps/Pinpoint) in [Rust](https://www.rust-lang.org/). The upstream Pinpoint project appears to be abandoned and started to segfault for me. I've started to use [reveal-md](https://github.com/webpro/reveal-md) for my actual presentations, but this is fun anyway :)
+This is a learning-exercise rewrite of [Pinpoint](http://wiki.gnome.org/Apps/Pinpoint) in [Rust](https://www.rust-lang.org/). The upstream Pinpoint project appears to be abandoned and started to segfault for me. The most recently active git repo I can find is [ffrank/gnome-pinpoint](https://github.com/ffrank/gnome-pinpoint). I've started to use [reveal-md](https://github.com/webpro/reveal-md) for my actual presentations, but this is fun anyway :)
 
 ## Presentation File Format
 

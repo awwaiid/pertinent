@@ -1,5 +1,12 @@
+use std::env;
+use std::fs;
+
 fn main() {
-    println!("{:?}", parser::parse_deck("hello"));
-    println!("{:?}", parser::parse_deck("hello world"));
-    println!("{:?}", parser::parse_deck("goodbye hello again"));
+    let args: Vec<String> = env::args().collect();
+
+    let filename = &args[1];
+    let content = fs::read_to_string(filename)
+        .expect("Error reading deck file");
+
+    println!("{:?}", parser::parse_deck(&content));
 }
