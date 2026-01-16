@@ -2,8 +2,8 @@ use std::fs;
 
 #[test]
 fn test_parse_simple_deck() {
-    let content = fs::read_to_string("tests/fixtures/simple.pin")
-        .expect("Failed to read test fixture");
+    let content =
+        fs::read_to_string("tests/fixtures/simple.pin").expect("Failed to read test fixture");
 
     let result = parser::parse_deck(&content);
     assert!(result.is_ok());
@@ -18,8 +18,8 @@ fn test_parse_simple_deck() {
 
 #[test]
 fn test_parse_complex_deck() {
-    let content = fs::read_to_string("tests/fixtures/complex.pin")
-        .expect("Failed to read test fixture");
+    let content =
+        fs::read_to_string("tests/fixtures/complex.pin").expect("Failed to read test fixture");
 
     let result = parser::parse_deck(&content);
     assert!(result.is_ok());
