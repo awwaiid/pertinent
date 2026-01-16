@@ -1,0 +1,15 @@
+# Global settings
+[bottom]
+[default-bg.jpg]
+
+--- [black] [center]
+Title Slide
+
+---
+Bullet Points:
+• First point
+• Second point
+• Third point
+
+--- [custom.jpg]
+Custom Background Slide
