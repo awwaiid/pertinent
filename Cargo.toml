@@ -13,3 +13,12 @@ path = "src/parser.rs"
 [dependencies]
 nom = "7.1"
 indoc = "2.0"
+bevy = { version = "0.18", default-features = false, features = [
+    "bevy_winit",
+    "bevy_render",
+    "bevy_core_pipeline",
+    "bevy_text",
+    "bevy_ui",
+    "x11",
+    "png",
+] }
