@@ -8,17 +8,18 @@ edition = "2021"
 name = "parser"
 path = "src/parser.rs"
 
+[[bin]]
+name = "pertinent"
+path = "src/main.rs"
+
+[[bin]]
+name = "minimal_test"
+path = "src/minimal_test.rs"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 nom = "7.1"
 indoc = "2.0"
-bevy = { version = "0.18", default-features = false, features = [
-    "bevy_winit",
-    "bevy_render",
-    "bevy_core_pipeline",
-    "bevy_text",
-    "bevy_ui",
-    "x11",
-    "png",
-] }
+bevy = "0.18"
+image = "0.25"
