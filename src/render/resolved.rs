@@ -36,7 +36,6 @@ pub struct ResolvedSlide {
     pub text_spans: Vec<TextSpan>,
     pub text_position: TextPosition,
     pub text_align: TextAlign,
-    pub base_font_size: f32,
 }
 
 impl Default for ResolvedSlide {
@@ -46,7 +45,6 @@ impl Default for ResolvedSlide {
             text_spans: Vec::new(),
             text_position: TextPosition::Center,
             text_align: TextAlign::Left,
-            base_font_size: 60.0,
         }
     }
 }

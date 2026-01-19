@@ -27,6 +27,12 @@ impl RenderColor {
     pub fn black() -> Self {
         Self::rgb(0.0, 0.0, 0.0)
     }
+
+    /// Default dark gray background color (matches Bevy's default window color)
+    /// Approximately RGB(50, 50, 56) - a pleasant dark charcoal gray
+    pub fn dark_gray() -> Self {
+        Self::rgb(0.196, 0.196, 0.22)
+    }
 }
 
 impl Default for RenderColor {
@@ -120,6 +126,6 @@ pub enum BackgroundSpec {
 
 impl Default for BackgroundSpec {
     fn default() -> Self {
-        Self::SolidColor(RenderColor::black())
+        Self::SolidColor(RenderColor::dark_gray())
     }
 }

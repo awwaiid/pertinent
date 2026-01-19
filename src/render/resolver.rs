@@ -50,30 +50,30 @@ fn resolve_slide(
     let text_align = get_text_align(&slide.options, global_options);
     let no_markup = has_no_markup(&slide.options, global_options);
 
-    // Get background
+    // Get background - check for image first, then color, then default to dark gray
     let background = if let Some(image_file) = get_background_image(&slide.options, global_options) {
         let scale = get_background_scale(&slide.options, global_options);
         BackgroundSpec::Image {
             path: PathBuf::from(image_file),
             scale,
         }
+    } else if let Some(color) = get_background_color(&slide.options, global_options) {
+        BackgroundSpec::SolidColor(color)
     } else {
-        BackgroundSpec::SolidColor(RenderColor::black())
+        // Default to dark gray to match Bevy's default window color
+        BackgroundSpec::SolidColor(RenderColor::dark_gray())
     };
 
     // Parse text into spans
-    let (text_spans, base_font_size) = if no_markup {
-        let spans = vec![TextSpan::new(&slide.content)];
-        let base_font_size = calculate_base_font_size(&slide.content, &config.dimensions);
-        (spans, base_font_size)
+    let text_spans = if no_markup {
+        vec![TextSpan::new(&slide.content)]
     } else {
         let parsed = parse_pango_markup(&slide.content);
         let base_font_size = calculate_base_font_size(&slide.content, &config.dimensions);
-        let spans = parsed
+        parsed
             .into_iter()
             .map(|(text, style)| style_to_text_span(text, style, base_font_size))
-            .collect();
-        (spans, base_font_size)
+            .collect()
     };
 
     ResolvedSlide {
@@ -81,7 +81,6 @@ fn resolve_slide(
         text_spans,
         text_position,
         text_align,
-        base_font_size,
     }
 }
 
@@ -166,6 +165,16 @@ pub fn get_background_image(slide_options: &[String], global_options: &[String])
         .chain(global_options.iter())
         .find(|opt| is_image_file(opt))
         .cloned()
+}
+
+/// Get the background color from options (e.g., [black], [white], [red])
+pub fn get_background_color(slide_options: &[String], global_options: &[String]) -> Option<RenderColor> {
+    for option in slide_options.iter().chain(global_options.iter()) {
+        if let Some(color) = parse_color(option) {
+            return Some(color);
+        }
+    }
+    None
 }
 
 /// Get the text position from options
